@@ -1,0 +1,97 @@
+<% if(deliveryOrders.length > 0) { %>
+    <% deliveryOrders.forEach(order => { %> 
+        <div class="container delivery-order-container my-3 shadow p-3">
+            <div class="container-fluid">
+                <div class="header d-flex justify-content-between">
+                    <div class="d-flex flex-column card-body mb-2"> 
+                        <div class="d-flex flex-column flex-sm-row">
+                            <h6 class="card-title order-id">Order Id </h6>
+                            <p class="card-text ms-2"><%= order.order_id %></p> 
+                            <!-- <input type="text" id="deliveryTabOrderId[<%# order.order_id %>]" value="<%# order.order_id %>"> -->
+                        </div>
+                        <div class="d-flex flex-column flex-sm-row">
+                            <h6 class="card-title order-status">Delivery Status </h6>
+                            <p class="card-text ms-2 text-capitalize"> <%= order.delivery_status %> </p> 
+                        </div>
+                        <div class="d-flex flex-column flex-sm-row">
+                            <h6 class="card-title order-status">Book Hero Username: </h6>
+                            <% delivery_status = ["locked", "pickedup", "delivered"] %> 
+                            <% if (delivery_status.includes(order.delivery_status) && !order.delivery_user ) { %>
+                                <p class="card-text ms-2 fw-bold"> Campus Book Drop Team i.e., Me %> </p>     
+                            <% } else { %>
+                                <p class="card-text ms-2 fw-bold"> <%= order.delivery_user ? order.delivery_user.username : "Null" %> </p> 
+                            <% } %> 
+                        </div>
+                    </div>
+                    <div class="show-delivery-options my-2 mx-2">
+                        <button class="show-delivery-options-btn btn btn-sm btn-secondary" id="<%=order.order_id%>">
+                            Set Status
+                        </button>
+                        <div class="show-delivery-options-body shadow rounded-2 mt-2" id="<%=order.order_id%>">
+                            <div class="d-flex flex-column justify-content-center" id="<%=order.order_id%>">
+                                <button class="btn btn-sm lock-order-btn delivery-status-btn" id="<%= order._id %>">locked</button>
+                                <button class="btn btn-sm pickedup-btn delivery-status-btn" id="<%= order._id %>">pickedup</button>
+                                <button class="btn btn-sm delivered-btn delivery-status-btn" id="<%= order._id %>">delivered</button>
+                                <!-- <button class="btn btn-sm failed-btn" id="<%# order._id %>">Delivery Failed</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% order.products.forEach((product, index) => { %> 
+                    <div class="card mb-3 p-0">
+                        <div class="card-body">
+                            <div class="row g-0">
+                                <div class="col-sm-4">
+                                    <% if (product.product.image) { %>
+                                        <img src="<%= product.product.image.url %> " class="img-fluid ratio ratio-4x3" alt="...">
+                                    <% } else {%>
+                                        <img src="/resources/photo.avif" class="img-fluid ratio ratio-4x3" alt="...">
+                                    <% } %> 
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="container d-flex flex-column justify-content-between">
+                                        <div>
+                                            <h5 class="card-title"><%= product.product.title %></h5>
+                                        </div>
+                                        <div>
+                                            <p class="card-text"><b>Pickup Qty:</b> <%= product.pickup_qty %></p>
+                                            <div class="d-flex flex-column flex-sm-row">
+                                                <p class="fw-bold">Pickup Address:</p>
+                                                <div class="d-flex flex-wrap">
+                                                    <p class="ms-1"> <%= order.pickup_addresses[index].name %>,</p>
+                                                    <p class="ms-1"> <%= order.pickup_addresses[index].mobile %>,</p>
+                                                    <p class="ms-1"> <%= order.pickup_addresses[index].room %></p>
+                                                    <% hostel = {TH: "Tilak Hostel", PH: "Patel Hostel", MH:"Malviya Hostel"} %> 
+                                                    <p class="ms-1"> <%= hostel[order.pickup_addresses[index].hostel] %></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+                <div class="card-body">
+                    <p> <b>Shipping Address: </b></p>
+                    <div class="d-flex flex-wrap">
+                        <p class="ms-1"> <%= order.shipping_address.name %>,</p>
+                        <p class="ms-1"> <%= order.shipping_address.mobile %>,</p>
+                        <p class="ms-1"> <%= order.shipping_address.room %></p>
+                        <% hostel = {TH: "Tilak Hostel", PH: "Patel Hostel", MH:"Malviya Hostel"} %> 
+                        <p class="ms-1"> <%= hostel[order.shipping_address.hostel] %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }) %> 
+<% } else { %>
+    <div class="row my-3">
+        <div class="col-12 alert alert-info container-fluid text-center rounded-5 mt-3 alert-dismissible fade show" role="alert">
+            <h4 class="text-center my-3">Currently There Are No Orders That Needs To Be Delivered</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+<% } %> 
+
+

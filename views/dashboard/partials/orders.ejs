@@ -1,0 +1,117 @@
+<% if(orders.length > 0) {%> 
+    <% orders.forEach(order => {%> 
+        <div class="container order-container my-3 shadow p-3">
+            <div class="container">
+                <div class="header d-flex justify-content-between">
+                    <div class="d-flex flex-column card-body"> 
+                        <div class="d-flex flex-column flex-sm-row">
+                            <h6 class="card-title order-id">Order Id </h6>
+                            <p class="card-text ms-2"><%= order.order_id %></p> 
+                        </div>
+                        <div class="d-flex flex-column flex-sm-row">
+                            <h6 class="card-title order-status">Order Status </h6>
+                            <p class="card-text ms-2 text-capitalize"><%= order.status %></p> 
+                        </div>
+                        <div class="d-flex flex-column flex-sm-row">
+                            <h6 class="card-title order-status">Comment:  </h6>
+                            <p class="card-text ms-2 text-capitalize"><%= order.statusComment %></p> 
+                        </div>
+                    </div>
+                    <div class="show-receipt-btn my-2 mx-2">
+                        <button class="teen-bindi" style="background: none; border: none;" id="<%=order.order_id%>">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                            </svg>
+                        </button>
+                        <div class="teen-bindi-body shadow rounded-3" id="<%=order.order_id%>">
+                            <a href="<%=order.receiptImage.url%>" class="btn btn-secondary btn-sm show-receipt-btn">Receipt</a>
+                            <p class="fs-5 fw-bold">Set Status</p>
+                            <div class="d-flex flex-wrap">
+                                <button class="ms-1 mb-1 btn btn-info order-status-btn processing-btn" id="<%= order._id %>">processing</button>
+                                <button class="ms-1 mb-1 btn btn-secondary order-status-btn confirmed-btn" id="<%= order._id %>">confirmed</button>
+                                <button class="ms-1 mb-1 btn btn-success order-status-btn delivered-btn" id="<%= order._id %>">delivered</button>
+                                <button class="ms-1 mb-1 btn btn-danger order-status-btn cancel-btn" id="<%= order._id %>">canceled</button>
+                                <button class="ms-1 mb-1 btn btn-warning order-status-btn return-btn" id="<%= order._id %>">returned</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container d-flex justify-content-evenly flex-wrap">
+                    <% order.products.forEach(product => { %>
+                        <a href="/books/<%= product.product._id %>" style="text-decoration: none; color: black;">
+                            <div class="card mb-3" style="max-width: 20em;">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <% if (product.product.image) { %>
+                                                <img src="<%= product.product.image.url %> " class="img-fluid ratio ratio-4x3" alt="...">
+                                            <% } else {%>
+                                                <img src="/resources/photo.avif" class="img-fluid ratio ratio-4x3" alt="...">
+                                            <% } %> 
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <h5 class="card-title mt-2"><%= product.product.title %></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a> 
+                    <% }) %>
+                </div>
+                <div class="container">
+                    <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#<%=order.order_id%>" aria-expanded="false" aria-controls="collapseExample">
+                        Show More 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                            <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="container mb-2">
+                    <div class="collapse" id="<%=order.order_id%>">
+                        <% order.products.forEach(product => { %> 
+                            <div class="container d-flex flex-wrap justify-content-between">
+                                <h5 class="card-title"><%= product.product.title %></h5>
+                                <div class="d-flex flex-wrap">
+                                    <p class="card-text fs-6 p-2">Qty: <%= product.order_qty %></p>
+                                    <p class="card-text fs-6 p-2">&#8377;<%= product.product.price %></p>
+                                </div>
+                            </div>
+                        <% }) %> 
+                        <p class="text-end">Delivery Charge: &#8377; <%= order.deliveryCharge %> </p>
+                        <h4 class="text-end">Total Amount: &#8377; <%= order.totalAmount %></h4>
+                        <div class="order-address">
+                            <h6 class="card-title">Shipping Address:</h6>
+                            <div class="">
+                                <p class="card-text fw-semibold ms-2 m-0"><%= order.address.name %> | <span><%= order.address.mobile %></span></p>
+                                <p class="card-text ms-2 mb-2"><%= order.address.room %>,
+                                    <% if(order.address.hostel === "TH") {%> 
+                                        <span>Tilak Hostel</span>
+                                    <% } %> 
+                                    <% if(order.address.hostel === "MH") {%> 
+                                        <span>Malviya Hostel</span>
+                                    <% } %> 
+                                    <% if(order.address.hostel === "PH") {%> 
+                                        <span>Patel Hostel</span>
+                                    <% } %> 
+                                </p>
+                            </div>
+                        </div>
+                        <div class="order-date">
+                            <h6 class="card-title">Ordered On: </h6>
+                            <% month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]%>
+                            <p class="card-text ms-2"><%= month[order.date.getMonth()] %>-<%= order.date.getDate() %>-<%=order.date.getFullYear() %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }) %> 
+<% } else { %> 
+    <div class="row my-3">
+        <div class="col-12 alert alert-info container-fluid text-center rounded-5 mt-3 alert-dismissible fade show" role="alert">
+            <h4 class="text-center my-3">There Are No Orders Yet!</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+<% } %> 
+

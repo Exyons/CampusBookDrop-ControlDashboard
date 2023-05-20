@@ -1,0 +1,37 @@
+<% layout("layouts/boilerplate") -%>
+
+<%- include("partials/order_status_comment_form")  %> 
+    <h2 class="text-center mb-3">Dashboard</h2>
+    <div class="container-fluid bg-body-tertiary">
+        <div class="dashboard-container">
+            <div class="dashboard-navbar">
+                <a class="dashboard-lnk orders selected">Orders</a>
+                <a class="dashboard-lnk delivery-orders">Delivery Orders</a>
+            </div>
+        </div>
+
+        <div class="content-container container-fluid my-3">
+            <div class="content orders">
+                <div class="container">
+                    <h6>Filter By</h6>
+                    <button class="btn btn-sm btn-success filter-btn" id="processing">Processing</button>
+                    <button class="btn btn-sm btn-success filter-btn" id="processing">Confirmed</button>
+                    <button class="btn btn-sm btn-success filter-btn" id="processing">Canceled</button>
+                    <button class="btn btn-sm btn-success filter-btn" id="processing">Return</button>
+                    <button class="btn btn-sm btn-success filter-btn" id="processing">Delivered</button>
+                </div>
+                <%- include("partials/orders") %>
+            </div>
+            <div class="content delivery-orders">
+                <div class="container">
+                    <h6>Filter By</h6>
+                    <button class="btn btn-sm btn-success filter-btn" id="processing">Open</button>
+                    <button class="btn btn-sm btn-success filter-btn" id="processing">Locked</button>
+                    <button class="btn btn-sm btn-success filter-btn" id="processing">PickedUp</button>
+                    <button class="btn btn-sm btn-success filter-btn" id="processing">Delivered</button>
+                </div>
+                <%- include("partials/delivery_orders") %>
+            </div>
+        </div>
+</div>
+<script src="/js/dashboard.js"></script>
