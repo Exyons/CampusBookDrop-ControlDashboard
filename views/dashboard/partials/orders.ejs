@@ -12,12 +12,20 @@
                             <h6 class="card-title order-status">Order Status </h6>
                             <p class="card-text ms-2 text-capitalize"><%= order.status %></p> 
                         </div>
-                        <div class="d-flex flex-column flex-sm-row">
+                        <div class="d-flex flex-column flex-sm-row mb-3">
                             <h6 class="card-title order-status">Comment:  </h6>
                             <p class="card-text ms-2 text-capitalize"><%= order.statusComment %></p> 
                         </div>
+                        <div class="d-flex flex-column flex-sm-row mb-2">
+                            <h6 class="card-title order-status">Payment Id: </h6>
+                            <% if (order.paymentId) { %>
+                                <p class="card-text ms-2 text-capitalize"><%= order.paymentId %></p> 
+                            <% } else { %>
+                                <p class="card-text ms-2 text-capitalize">-</p> 
+                            <% } %> 
+                        </div>
                     </div>
-                    <div class="show-receipt-btn my-2 mx-2">
+                    <div class="show-receipt-btn mx-2">
                         <button class="teen-bindi" style="background: none; border: none;" id="<%=order.order_id%>">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                                 <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
@@ -27,11 +35,11 @@
                             <a href="<%=order.receiptImage.url%>" class="btn btn-secondary btn-sm show-receipt-btn">Receipt</a>
                             <p class="fs-5 fw-bold">Set Status</p>
                             <div class="d-flex flex-wrap">
-                                <button class="ms-1 mb-1 btn btn-info order-status-btn processing-btn" id="<%= order._id %>">processing</button>
-                                <button class="ms-1 mb-1 btn btn-secondary order-status-btn confirmed-btn" id="<%= order._id %>">confirmed</button>
-                                <button class="ms-1 mb-1 btn btn-success order-status-btn delivered-btn" id="<%= order._id %>">delivered</button>
-                                <button class="ms-1 mb-1 btn btn-danger order-status-btn cancel-btn" id="<%= order._id %>">canceled</button>
-                                <button class="ms-1 mb-1 btn btn-warning order-status-btn return-btn" id="<%= order._id %>">returned</button>
+                                <button class="ms-1 mb-1 btn btn-info order-status-btn processing" id="<%= order._id %>">processing</button>
+                                <button class="ms-1 mb-1 btn btn-secondary order-status-btn confirmed" id="<%= order._id %>">confirmed</button>
+                                <button class="ms-1 mb-1 btn btn-success order-status-btn delivered" id="<%= order._id %>">delivered</button>
+                                <button class="ms-1 mb-1 btn btn-danger order-status-btn cancel" id="<%= order._id %>">canceled</button>
+                                <button class="ms-1 mb-1 btn btn-warning order-status-btn return" id="<%= order._id %>">returned</button>
                             </div>
                         </div>
                     </div>
@@ -39,24 +47,34 @@
                 <div class="container d-flex justify-content-evenly flex-wrap">
                     <% order.products.forEach(product => { %>
                         <a href="/books/<%= product.product._id %>" style="text-decoration: none; color: black;">
-                            <div class="card mb-3" style="max-width: 20em;">
+                            <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <% if (product.product.image) { %>
                                                 <img src="<%= product.product.image.url %> " class="img-fluid ratio ratio-4x3" alt="...">
                                             <% } else {%>
-                                                <img src="/resources/photo.avif" class="img-fluid ratio ratio-4x3" alt="...">
+                                                <img src="/images/CampusBookDrop_Logo.png" class="img-fluid ratio ratio-4x3" alt="...">
                                             <% } %> 
                                         </div>
                                         <div class="col-sm-8">
                                             <h5 class="card-title mt-2"><%= product.product.title %></h5>
+                                            <h5 class="text-danger">Price:  &#8377; <span><%= product.product.price %></span></h5>
+                                            <p class="card-title mt-2 fw-bold">Seller Email:</p> 
+                                            <p class="fs-6"><%= product.product.user.email %></p>
+                                            <p class="card-title mt-2 fw-bold">Seller Username</p>
+                                            <p class="fs-6"><%= product.product.user.username %></p>
+                                            <p class="card-title mt-2 fw-bold">Seller UPI Id:</p> 
+                                            <p class="fs-6"><%= product.product.user.sellerUpiId %></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </a> 
                     <% }) %>
+                </div>
+                <div class="container fs-4">
+                    <p>Service Charge: 7%</p>
                 </div>
                 <div class="container">
                     <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#<%=order.order_id%>" aria-expanded="false" aria-controls="collapseExample">

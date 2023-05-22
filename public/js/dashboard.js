@@ -6,6 +6,7 @@ const orderStatusCommentFormModal = document.querySelector(".satus-comment-modal
 const submitOrderStatusCommentBtn = document.querySelector(".submit-order-status-comment-btn");
 const orderStatusForm = document.querySelector(".order-status-form");
 const orderStatusFormInput = document.querySelector(".order-status-form-input");
+const paymentIdContainer = document.querySelector("#paymentIdContainer");
 
 
 orderStatusCommentFormModal.addEventListener('shown.bs.modal', () => {
@@ -135,22 +136,27 @@ if (showDeliveryOptionsBtn.length) {
 
 const orderStatusValue = document.querySelector("#orderStatusValue");
 const orderIdInput = document.querySelector("#orderId");
-
+const paymentIdInput = document.querySelector("#paymentId");
 const orderStatusBtns = document.querySelectorAll(".order-status-btn");
 orderStatusBtns.forEach(btn => {
     btn.addEventListener("click", () => {
         orderStatusCommentBootstrapModal.show();
         orderStatusValue.value = btn.innerText;
         orderIdInput.value = btn.id;
+        if(btn.classList.contains("confirmed")){
+            paymentIdContainer.classList.replace("d-none", "d-block")
+        }
     })
 })
 
 submitOrderStatusCommentBtn.addEventListener("click", async () => {
+    const paymentIdInput = document.querySelector("#paymentId");
     try {
         const res = await axios.post("/dashboard/order/updateStatus", {
             status: orderStatusValue.value,
             statusComment: orderStatusForm.elements.statusComment.value,
-            orderId: orderIdInput.value
+            orderId: orderIdInput.value,
+            paymentId: paymentIdInput.value
         })
 
         if (res.data.success) {
@@ -167,16 +173,15 @@ const deliveryStatusBtns = document.querySelectorAll(".delivery-status-btn");
 const deliveryTabOrderId = document.querySelector("#deliveryTabOrderId");
 deliveryStatusBtns.forEach(btn => {
     btn.addEventListener("click", async () => {
-        
         try {
             const res = await axios.post("/dashboard/deliveryOrder/updateStatus", {
                 delivery_status: btn.innerText,
                 deliveryOrderId: btn.id,
-                orderId: btn.parentElement.id
+                orderId: btn.parentElement.id,
             })
+            console.log(res.data)
             showToast(res.data)
         } catch (error) {
-            console.log(error)
             showToast({ error: "Cannot Update Status!" })
         }
     })

@@ -4,24 +4,33 @@ const DeliveryOrder = require("../models/delivery_order");
 const { Product } = require("../models/product");
 const { Address } = require("../models/address");
 
-const renderAdminDashboard = async (req, res) => {
+const renderAdminDashboard = async (req, res, next) => {
     let orders = [];
     let deliveryOrders = [];
     try {
-        orders = await Order.find({});
+        orders = await Order.find({}).populate({
+            path: 'products.product',
+            populate: {
+              path: 'user',
+              model: 'User'
+            }
+          })
         deliveryOrders = await DeliveryOrder.find({}).populate("delivery_user");
     } catch (error) {
-        req.flash("error", "Server Error!");
-        res.redirect("/");
+        next(error);
     }
     res.render("dashboard/index", { orders, deliveryOrders })
 }
 
 const updateOrderStatus = async (req, res) => {
-    const { orderId, status, statusComment } = req.body
+    const { orderId, status, statusComment, paymentId } = req.body
+    console.log(paymentId);
     try {
-        const order = await Order.findByIdAndUpdate(orderId, { status, statusComment })
+        const order = await Order.findById(orderId)
         if (status === "confirmed") {
+            if(!paymentId.length){
+                return res.json({ error: "Payment Id Is Required To Confirm The Payment!" })
+            }
             const deliveryOrder = await DeliveryOrder.findOneAndUpdate({ order_id: order.order_id }, { payment_status: "confirmed" });
             if (!deliveryOrder) {
                 return res.json({ error: "Cannot Set Payment Status of Delivery Order To Confirmed Also!" })
@@ -30,6 +39,10 @@ const updateOrderStatus = async (req, res) => {
         if (!order) {
             return res.json({ error: "Order Not Found!" })
         }
+        order.paymentId = paymentId;
+        order.status = status;
+        order.statusComment = statusComment;
+        await order.save();
         res.json({ success: "Status Saved!" })
     } catch (error) {
         res.json({ error: "Server Error" })
