@@ -1,14 +1,43 @@
 {
   "name": "campusbookdrop_admin_console",
   "version": "1.0.0",
-  "description": "",
+  "description": "Internal admin console for Campus Book Drop: verify out-of-band UPI payments from uploaded receipts and drive orders and hostel-to-hostel deliveries through their status machines.",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "admin-dashboard",
+    "admin-panel",
+    "back-office",
+    "order-management",
+    "delivery-tracking",
+    "payment-verification",
+    "upi",
+    "marketplace",
+    "campus",
+    "express",
+    "nodejs",
+    "mongodb",
+    "mongoose",
+    "ejs",
+    "server-side-rendering",
+    "bootstrap",
+    "startup"
+  ],
+  "author": "Ankur Singh (Exyons)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Exyons/CampusBookDrop-ControlDashboard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Exyons/CampusBookDrop-ControlDashboard/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "connect-flash": "^0.1.1",
     "connect-mongo": "^5.0.0",

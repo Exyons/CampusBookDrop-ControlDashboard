@@ -1,2 +1,10 @@
 node_modules
+
+# Never commit real credentials. Use .env.example as the template.
 .env
+.env.*
+!.env.example
+
+*.log
+npm-debug.log*
+.DS_Store
