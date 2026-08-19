@@ -1,7 +1,7 @@
 {
   "name": "campusbookdrop_admin_console",
   "version": "1.0.0",
-  "description": "Internal admin console for Campus Book Drop: verify out-of-band UPI payments from uploaded receipts and drive orders and hostel-to-hostel deliveries through their status machines.",
+  "description": "Internal admin console for Campus Book Drop. Verifies out-of-band UPI payments from uploaded receipts, then moves orders and hostel-to-hostel deliveries through their state machines.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
